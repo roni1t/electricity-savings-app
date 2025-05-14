@@ -38,7 +38,7 @@ def analyze_consumption(file_path):
     df['שעה'] = df['datetime'].dt.hour
     df['יום בשבוע'] = df['datetime'].dt.dayofweek
     df['חודש'] = df['datetime'].dt.to_period('M').astype(str)
-
+monthly = payments.groupby('חודש')[['הייטק', 'לילה', 'יום', 'משפחה', 'כללי']].sum()
     payments = df.apply(classify_payment, axis=1)
     payments['חודש'] = df['חודש']
     numeric_cols = payments.select_dtypes(include='number').columns.tolist()
