@@ -5,11 +5,24 @@ import pandas as pd
 from io import StringIO
 import matplotlib.pyplot as plt
 
-st.set_page_config(page_title="מחשבון חיסכון בחשמל", layout="wide")
-st.title("🔌 מחשבון חיסכון בצריכת חשמל לפי מסלולים")
-st.markdown("העלה את דוח הצריכה מחברת החשמל (CSV) וחשב את העלות החודשית לפי כל מסלול")
+st.set_page_config(page_title="מחשבון חשמל", page_icon="🔌", layout="wide")
 
-uploaded_file = st.file_uploader("📤 העלה קובץ צריכה", type="csv")
+st.markdown(
+    '''
+    <style>
+    body, .css-18e3th9, .css-1d391kg {
+        direction: rtl;
+        text-align: right;
+    }
+    </style>
+    ''',
+    unsafe_allow_html=True
+)
+
+st.markdown("# 🔌 מחשבון חיסכון בצריכת חשמל לפי מסלולים")
+st.markdown("העלה את קובץ הצריכה שלך (CSV מחברת החשמל) וקבל ניתוח צריכה, חישוב עלויות, גרף ודוח להורדה.")
+
+uploaded_file = st.file_uploader("📤 בחר קובץ צריכה", type="csv")
 
 if uploaded_file:
     with open("uploaded.csv", "w", encoding="utf-8") as f:
@@ -17,18 +30,20 @@ if uploaded_file:
 
     df_result = analyze_consumption("uploaded.csv")
 
-    st.subheader("📊 תוצאות לפי חודש:")
-    st.dataframe(df_result)
+    st.markdown("### 📊 טבלת עלות חודשית לפי מסלולים:")
+    styled = df_result.style.background_gradient(cmap='Oranges').format("{:.2f}")
+    st.dataframe(styled, use_container_width=True)
 
-    st.subheader("📈 גרף השוואה בין מסלולים:")
+    st.markdown("### 📈 גרף השוואת עלויות בין מסלולים:")
     fig, ax = plt.subplots(figsize=(12, 5))
     df_result.set_index('חודש')[['עלות רגילה (₪)', 'הייטק', 'לילה', 'משפחה', 'כללי']].plot(ax=ax)
-    ax.set_ylabel("עלות חודשית (₪)")
-    ax.set_title("השוואת עלות חודשית לפי מסלולי חשמל")
+    ax.set_title("השוואת עלות חודשית לפי מסלולים", fontsize=14)
+    ax.set_ylabel("עלות (₪)")
     ax.grid(True)
     st.pyplot(fig)
 
+    st.markdown("### 📥 הורד דוח אקסל")
     csv = df_result.to_csv(index=False).encode('utf-8-sig')
-    st.download_button("⬇️ הורד את הדוח כקובץ Excel", data=csv, file_name="תוצאות_חיסכון.csv", mime='text/csv')
+    st.download_button("⬇️ הורד דוח", data=csv, file_name="דו"ח_חיסכון.csv", mime='text/csv')
 else:
-    st.info("העלה קובץ כדי להתחיל לחשב")
+    st.info("נא להעלות קובץ לצורך חישוב")
