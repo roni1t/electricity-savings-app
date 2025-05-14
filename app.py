@@ -44,6 +44,6 @@ if uploaded_file:
 
     st.markdown("### 📥 הורד דוח אקסל")
     csv = df_result.to_csv(index=False).encode('utf-8-sig')
-    st.download_button("⬇️ הורד דוח", data=csv, file_name="דו"ח_חיסכון.csv", mime='text/csv')
+st.download_button("⬇️ הורד דוח", data=csv, file_name="דו\"ח_חיסכון.csv", mime='text/csv')
 else:
     st.info("נא להעלות קובץ לצורך חישוב")
