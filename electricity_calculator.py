@@ -41,7 +41,7 @@ def analyze_consumption(file_path):
 
     payments = df.apply(classify_payment, axis=1)
     payments['חודש'] = df['חודש']
-    monthly = payments.groupby('חודש').sum()
+    monthly = payments.groupby('חודש')[['הייטק', 'לילה', 'יום', 'משפחה', 'כללי']].sum()
     monthly_kwh = df.groupby('חודש')['צריכה בקוט"ש'].sum()
     monthly['צריכה בקוט"ש'] = monthly_kwh
     monthly['עלות רגילה (₪)'] = (monthly_kwh * TARIFF).round(2)
