@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 
 st.set_page_config(page_title="מחשבון חשמל", page_icon="🔌", layout="wide")
 
+# עיצוב RTL
 st.markdown(
     '''
     <style>
@@ -31,7 +32,8 @@ if uploaded_file:
     df_result = analyze_consumption("uploaded.csv")
 
     st.markdown("### 📊 טבלת עלות חודשית לפי מסלולים:")
-    styled = df_result.style.background_gradient(cmap='Oranges').format("{:.2f}")
+    numeric_cols = df_result.select_dtypes(include='number').columns
+    styled = df_result.style.format("{:.2f}", subset=numeric_cols).background_gradient(cmap='Oranges', subset=numeric_cols)
     st.dataframe(styled, use_container_width=True)
 
     st.markdown("### 📈 גרף השוואת עלויות בין מסלולים:")
@@ -44,6 +46,7 @@ if uploaded_file:
 
     st.markdown("### 📥 הורד דוח אקסל")
     csv = df_result.to_csv(index=False).encode('utf-8-sig')
-    st.download_button("⬇️ הורד דוח", data=csv, file_name="דו\"ח_חיסכון.csv", mime='text/csv')
+    st.download_button("⬇️ הורד דוח", data=csv, file_name='דו"ח_חיסכון.csv', mime='text/csv')
+
 else:
     st.info("נא להעלות קובץ לצורך חישוב")
