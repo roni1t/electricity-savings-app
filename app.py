@@ -70,7 +70,7 @@ if uploaded_file:
     st.markdown("### 💡 סיכום שנתי:")
     col1, col2, col3 = st.columns(3)
     col1.metric("📉 המסלול המשתלם ביותר", best_plan_name)
-    col2.metric("💰 חיסכון צפוי בש"ח", f"{best_saving:,.0f} ₪")
+    col2.metric('💰 חיסכון צפוי בש"ח', f"{best_saving:,.0f} ₪")
     col3.metric("📆 עלות שנתית ממוצעת", f"{total_costs.min():,.0f} ₪")
 
     # ⬇️ כפתור הורדה בראש העמוד
